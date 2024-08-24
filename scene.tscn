@@ -1,0 +1,71 @@
+[gd_scene load_steps=10 format=3 uid="uid://s1mvmevu0yng"]
+
+[ext_resource type="Shader" path="res://water.gdshader" id="1_ysl54"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_dh12k"]
+size = Vector2(2000, 2000)
+subdivide_width = 500
+subdivide_depth = 500
+orientation = 1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4nt17"]
+noise_type = 3
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tdx24"]
+seamless = true
+seamless_blend_skirt = 1.0
+as_normal_map = true
+bump_strength = 4.1
+noise = SubResource("FastNoiseLite_4nt17")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4pq42"]
+frequency = 0.05
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n5igi"]
+seamless = true
+seamless_blend_skirt = 1.0
+noise = SubResource("FastNoiseLite_4pq42")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_48e26"]
+render_priority = -1
+shader = ExtResource("1_ysl54")
+shader_parameter/albedo = Color(0, 0.321569, 0.431373, 1)
+shader_parameter/albedo_2 = null
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.02
+shader_parameter/normal_scale = 500.0
+shader_parameter/wave_direction = Vector2(2, 0)
+shader_parameter/wave_direction_2 = Vector2(0, 1)
+shader_parameter/time_scale = 0.005
+shader_parameter/noise_scale = 10.0
+shader_parameter/height_scale = 1.0
+shader_parameter/engine_time_scale = 1.0
+shader_parameter/color_deep = Color(0, 0.321569, 0.431373, 1)
+shader_parameter/color_shallow = Color(0, 0.313726, 0.247059, 1)
+shader_parameter/beers_law = 2.0
+shader_parameter/depth_offset = -0.75
+shader_parameter/edge_scale = 0.6
+shader_parameter/near = 0.5
+shader_parameter/far = 500.0
+shader_parameter/edge_color = Color(0.698039, 1, 1, 1)
+shader_parameter/wave = SubResource("NoiseTexture2D_n5igi")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_tdx24")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3miyf"]
+top_radius = 10.0
+bottom_radius = 10.0
+height = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lml6n"]
+albedo_color = Color(0.234351, 0, 0.0164985, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_dh12k")
+surface_material_override/0 = SubResource("ShaderMaterial_48e26")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_3miyf")
+surface_material_override/0 = SubResource("StandardMaterial3D_lml6n")
